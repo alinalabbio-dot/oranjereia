@@ -15,9 +15,9 @@
       </button>
       <div class="progress-wrap" aria-label="Прогресс путешествия">
         <div class="progress-track"><span id="progressFill"></span></div>
-        <span id="progressText">Зал 1 из 10</span>
+        <span id="progressText">Зал 1 из 11</span>
       </div>
-      <div class="stars" aria-live="polite"><span>★</span> <b id="starCount">0</b>/7</div>
+      <div class="stars" aria-live="polite"><span>★</span> <b id="starCount">0</b>/8</div>
     </header>
 
     <main id="app">
@@ -34,7 +34,7 @@
           </div>
           <div class="floating-specimen specimen-a"><img src="assets/butterfly.svg" alt=""></div>
           <div class="floating-specimen specimen-b"><img src="assets/mushroom.svg" alt=""></div>
-          <div class="floating-specimen specimen-c"><img src="assets/microbe.svg" alt=""></div>
+          <div class="floating-specimen specimen-c"><img src="assets/bacterium.png" alt=""></div>
         </div>
       </section>
 
@@ -44,7 +44,7 @@
           <button class="kingdom-tile animals" data-fact="Животные едят готовую пищу и обычно могут двигаться."><img src="assets/cat.svg" alt=""><b>Животные</b><span>Зоозал</span></button>
           <button class="kingdom-tile plants" data-fact="Растения делают себе пищу с помощью света."><img src="assets/tree.svg" alt=""><b>Растения</b><span>Оранжерея</span></button>
           <button class="kingdom-tile fungi" data-fact="Грибы — не растения и не животные. Они питаются готовыми веществами."><img src="assets/mushroom.svg" alt=""><b>Грибы</b><span>Пещера</span></button>
-          <button class="kingdom-tile bacteria" data-fact="Бактерии — очень маленькие живые организмы."><img src="assets/microbe.svg" alt=""><b>Бактерии</b><span>Лаборатория</span></button>
+          <button class="kingdom-tile bacteria" data-fact="Бактерии — очень маленькие живые организмы."><img src="assets/bacterium.png" alt=""><b>Бактерии</b><span>Лаборатория</span></button>
         </div>
         <div class="fact-bubble" id="kingdomFact">Царство — большая группа живых существ, похожих по важным признакам.</div>
         <button class="primary" type="button" data-next>Перейти к сортировке →</button>
@@ -87,17 +87,25 @@
         <div class="lesson-card"><p class="eyebrow">Лаборатория бактерий</p><h2 id="bacteriaTitle">Кого видно без микроскопа?</h2><p>Бактерии живые, но такие маленькие, что обычно их нельзя увидеть без микроскопа.</p></div>
         <div class="choice-grid" data-choice-game="visible"></div>
         <p class="game-hint" data-choice-hint="visible">Выбери тех, кого можно увидеть глазами.</p>
-        <div class="actions"><button class="secondary" type="button" data-check-choice="visible">Проверить</button><button class="primary hidden" type="button" data-choice-next="visible" data-next>Быстрый турнир →</button></div>
+        <div class="actions"><button class="secondary" type="button" data-check-choice="visible">Проверить</button><button class="primary hidden" type="button" data-choice-next="visible" data-next>Сравнить царства →</button></div>
       </section>
 
-      <section class="screen odd-screen" data-screen="7" aria-labelledby="oddTitle">
+      <section class="screen traits-screen" data-screen="7" aria-labelledby="traitsTitle">
+        <div class="section-heading compact"><p class="eyebrow">Задание на сравнение</p><h2 id="traitsTitle">Чья это характеристика?</h2><p>Распредели признаки между четырьмя царствами.</p></div>
+        <div class="drop-grid traits-zones" data-sort-board="traits"></div>
+        <div class="card-tray traits-tray" data-card-tray="traits"></div>
+        <p class="game-hint" data-hint="traits">Выбери характеристику и подходящее царство.</p>
+        <div class="success-panel" data-success="traits"><b>Ты отлично сравнила все царства!</b><button class="primary" type="button" data-next>Быстрый турнир →</button></div>
+      </section>
+
+      <section class="screen odd-screen" data-screen="8" aria-labelledby="oddTitle">
         <div class="section-heading compact"><p class="eyebrow">Быстрый турнир</p><h2 id="oddTitle">Кто лишний?</h2><p id="roundLabel">Раунд 1 из 4</p></div>
         <div class="odd-grid" id="oddGrid"></div>
         <p class="game-hint" id="oddHint">Найди того, кто относится к другому царству.</p>
         <button class="primary hidden" type="button" id="oddNext">Следующий раунд →</button>
       </section>
 
-      <section class="screen final-sort" data-screen="8" aria-labelledby="finalSortTitle">
+      <section class="screen final-sort" data-screen="9" aria-labelledby="finalSortTitle">
         <div class="section-heading compact"><p class="eyebrow">Финальный квест</p><h2 id="finalSortTitle">Спаси весь музей</h2><p>Последние экспонаты ждут своих залов!</p></div>
         <div class="drop-grid" data-sort-board="final"></div>
         <div class="card-tray compact-tray" data-card-tray="final"></div>
@@ -105,7 +113,7 @@
         <div class="success-panel" data-success="final"><b>Все залы снова сияют!</b><button class="primary" type="button" data-next>Получить награду →</button></div>
       </section>
 
-      <section class="screen award-screen" data-screen="9" aria-labelledby="awardTitle">
+      <section class="screen award-screen" data-screen="10" aria-labelledby="awardTitle">
         <div class="confetti" aria-hidden="true"></div>
         <div class="medal"><span>★</span></div>
         <p class="eyebrow">Музей Жизни спасён</p><h2 id="awardTitle">Ты — Хранитель<br>Музея Жизни!</h2>
@@ -116,6 +124,6 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="script.js"></script>
+  <script src="script.js?v=3"></script>
 </body>
 </html>

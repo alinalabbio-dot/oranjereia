@@ -1,4 +1,4 @@
-const asset = name => `assets/${name}.svg`;
+const asset = name => name==='bacterium' ? 'assets/bacterium.png' : `assets/${name}.svg`;
 function shuffled(items){
   const result=[...items];
   for(let i=result.length-1;i>0;i--){
@@ -11,14 +11,14 @@ const ITEMS = {
   cat:['Кот','cat','animals'], butterfly:['Бабочка','butterfly','animals'], jellyfish:['Медуза','jellyfish','animals'], dog:['Собака','dog','animals'], coral:['Коралл','coral','animals'], hedgehog:['Ёж','hedgehog','animals'], whale:['Кит','whale','animals'], ant:['Муравей','ant','animals'], wolf:['Волк','wolf','animals'], fox:['Лиса','fox','animals'], bear:['Медведь','bear','animals'],
   oak:['Дуб','tree','plants'], daisy:['Ромашка','flower','plants'], spruce:['Ель','evergreen','plants'], birch:['Берёза','tree','plants'], cactus:['Кактус','cactus','plants'], algae:['Водоросль','leaf','plants'],
   mushroom:['Мухомор','mushroom','fungi'], champignon:['Шампиньон','mushroom','fungi'], mold:['Плесень','mold','fungi'], yeast:['Дрожжи','yeast','fungi'], tinder:['Трутовик','mushroom','fungi'],
-  yogurt:['Бактерия йогурта','microbe','bacteria'], ecoli:['Кишечная палочка','microbe2','bacteria'], microscopeB:['Бактерия в микроскопе','microscope','bacteria'], soilB:['Почвенная бактерия','microbe3','bacteria'], toothB:['Бактерия на зубах','microbe4','bacteria']
+  yogurt:['Бактерия йогурта','bacterium','bacteria'], ecoli:['Кишечная палочка','bacterium','bacteria'], microscopeB:['Бактерия в микроскопе','bacterium','bacteria'], soilB:['Почвенная бактерия','bacterium','bacteria'], toothB:['Бактерия на зубах','bacterium','bacteria']
 };
 const KINGDOMS={animals:'Зал животных',plants:'Оранжерея растений',fungi:'Пещера грибов',bacteria:'Лаборатория бактерий'};
 const state={screen:0,stars:0,earned:new Set(),selected:null,oddRound:0};
 const screens=[...document.querySelectorAll('.screen')];
 const toast=document.getElementById('toast');
 function showToast(text){toast.textContent=text;toast.classList.add('show');clearTimeout(showToast.t);showToast.t=setTimeout(()=>toast.classList.remove('show'),1800)}
-function goTo(n){state.screen=Math.max(0,Math.min(screens.length-1,n));screens.forEach((s,i)=>s.classList.toggle('active',i===state.screen));document.getElementById('progressFill').style.width=`${(state.screen+1)*10}%`;document.getElementById('progressText').textContent=`Зал ${state.screen+1} из 10`;scrollTo({top:0,behavior:'smooth'});if(state.screen===7)renderOdd();}
+function goTo(n){state.screen=Math.max(0,Math.min(screens.length-1,n));screens.forEach((s,i)=>s.classList.toggle('active',i===state.screen));document.getElementById('progressFill').style.width=`${((state.screen+1)/screens.length)*100}%`;document.getElementById('progressText').textContent=`Зал ${state.screen+1} из ${screens.length}`;scrollTo({top:0,behavior:'smooth'});if(state.screen===8)renderOdd();}
 function earn(key){if(!state.earned.has(key)){state.earned.add(key);state.stars++;document.getElementById('starCount').textContent=state.stars;showToast('★ Новая звезда!')}}
 document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>goTo(state.screen+1)));
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>goTo(+b.dataset.go)));
@@ -26,12 +26,47 @@ document.querySelectorAll('[data-fact]').forEach(b=>b.addEventListener('click',(
 
 function card(key,kind='specimen-card'){const [label,img,kingdom]=ITEMS[key];const el=document.createElement('button');el.type='button';el.className=kind;el.dataset.key=key;el.dataset.kingdom=kingdom;el.draggable=kind==='specimen-card';el.innerHTML=`<img src="${asset(img)}" alt=""><span>${label}</span>`;return el}
 function buildSort(id,keys){const board=document.querySelector(`[data-sort-board="${id}"]`),tray=document.querySelector(`[data-card-tray="${id}"]`);Object.entries(KINGDOMS).forEach(([k,label])=>{const z=document.createElement('div');z.className=`drop-zone ${k}`;z.dataset.kingdom=k;z.innerHTML=`<h3>${label}</h3>`;board.append(z)});shuffled(keys).forEach(k=>tray.append(card(k)));wireSort(id)}
-function wireSort(id){const board=document.querySelector(`[data-sort-board="${id}"]`),tray=document.querySelector(`[data-card-tray="${id}"]`),hint=document.querySelector(`[data-hint="${id}"]`);let dragged=null;tray.addEventListener('dragstart',e=>{const c=e.target.closest('.specimen-card');if(c){dragged=c;setTimeout(()=>c.style.opacity=.45)}});tray.addEventListener('dragend',()=>{if(dragged)dragged.style.opacity='';dragged=null});[...board.querySelectorAll('.drop-zone')].forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over')});z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragged)place(dragged,z,id,hint,tray)});z.addEventListener('click',()=>{if(state.selected)place(state.selected,z,id,hint,tray)})});tray.addEventListener('click',e=>{const c=e.target.closest('.specimen-card');if(!c)return;tray.querySelectorAll('.selected').forEach(x=>x.classList.remove('selected'));state.selected=c;c.classList.add('selected');board.querySelectorAll('.drop-zone').forEach(x=>x.classList.add('selected-target'));hint.textContent=`Выбран экспонат «${ITEMS[c.dataset.key][0]}». Теперь выбери зал.`})}
+function wireSort(id){const board=document.querySelector(`[data-sort-board="${id}"]`),tray=document.querySelector(`[data-card-tray="${id}"]`),hint=document.querySelector(`[data-hint="${id}"]`);let dragged=null;tray.addEventListener('dragstart',e=>{const c=e.target.closest('.specimen-card');if(c){dragged=c;setTimeout(()=>c.style.opacity=.45)}});tray.addEventListener('dragend',()=>{if(dragged)dragged.style.opacity='';dragged=null});[...board.querySelectorAll('.drop-zone')].forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('drag-over')});z.addEventListener('dragleave',()=>z.classList.remove('drag-over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('drag-over');if(dragged)place(dragged,z,id,hint,tray)});z.addEventListener('click',()=>{if(state.selected)place(state.selected,z,id,hint,tray)})});tray.addEventListener('click',e=>{const c=e.target.closest('.specimen-card');if(!c)return;tray.querySelectorAll('.selected').forEach(x=>x.classList.remove('selected'));state.selected=c;c.classList.add('selected');board.querySelectorAll('.drop-zone').forEach(x=>x.classList.add('selected-target'));const label=c.dataset.label||(ITEMS[c.dataset.key]&&ITEMS[c.dataset.key][0])||'карточка';hint.textContent=`Выбрано: «${label}». Теперь выбери царство.`})}
 function place(c,z,id,hint,tray){boardClear(z.closest('.drop-grid'));if(c.dataset.kingdom===z.dataset.kingdom){c.classList.remove('selected');c.draggable=false;z.append(c);state.selected=null;hint.textContent='Верно! Отличная работа.';hint.className='game-hint good';if(!tray.querySelector('.specimen-card')){document.querySelector(`[data-success="${id}"]`).classList.add('show');earn(id)}}else{c.classList.add('shake');setTimeout(()=>c.classList.remove('shake'),400);hint.textContent=hintFor(c.dataset.kingdom);hint.className='game-hint try'} }
 function boardClear(board){board.querySelectorAll('.drop-zone').forEach(x=>x.classList.remove('selected-target'))}
 function hintFor(k){return {animals:'Почти! Может ли это существо двигаться или есть готовую пищу?',plants:'Подумай, умеет ли оно делать пищу с помощью света.',fungi:'Вспомни: плесень и дрожжи — тоже грибы.',bacteria:'Возможно, без микроскопа его не разглядеть.'}[k]}
 buildSort('first',['cat','butterfly','jellyfish','oak','daisy','spruce','mushroom','mold','yeast','yogurt','ecoli','microscopeB']);
 buildSort('final',['dog','butterfly','jellyfish','coral','hedgehog','oak','daisy','cactus','algae','spruce','mushroom','champignon','mold','yeast','tinder','yogurt','ecoli','microscopeB','soilB','toothB']);
+
+const TRAITS=[
+  ['Едят готовую пищу','animals'],
+  ['Обычно могут двигаться','animals'],
+  ['Готовят пищу с помощью света','plants'],
+  ['У большинства есть корень, стебель и листья','plants'],
+  ['К ним относятся плесень и дрожжи','fungi'],
+  ['Питаются готовыми веществами и не двигаются','fungi'],
+  ['Обычно видны только под микроскопом','bacteria'],
+  ['Очень маленькие, но живые','bacteria']
+];
+function buildTraits(){
+  const board=document.querySelector('[data-sort-board="traits"]');
+  const tray=document.querySelector('[data-card-tray="traits"]');
+  Object.entries(KINGDOMS).forEach(([kingdom,label])=>{
+    const zone=document.createElement('div');
+    zone.className=`drop-zone ${kingdom}`;
+    zone.dataset.kingdom=kingdom;
+    zone.innerHTML=`<h3>${label}</h3>`;
+    board.append(zone);
+  });
+  shuffled(TRAITS).forEach(([label,kingdom],index)=>{
+    const item=document.createElement('button');
+    item.type='button';
+    item.className='specimen-card trait-card';
+    item.draggable=true;
+    item.dataset.key=`trait-${index}`;
+    item.dataset.label=label;
+    item.dataset.kingdom=kingdom;
+    item.innerHTML=`<span>${label}</span>`;
+    tray.append(item);
+  });
+  wireSort('traits');
+}
+buildTraits();
 
 const choiceGames={
  animals:{keys:['dog','jellyfish','coral','butterfly','mushroom','birch'],correct:['dog','jellyfish','coral','butterfly'],success:'Верно! Даже коралл — животное, хотя похож на растение.'},
@@ -50,6 +85,6 @@ const rounds=[
 ];
 function renderOdd(){const r=rounds[state.oddRound],grid=document.getElementById('oddGrid');grid.innerHTML='';document.getElementById('roundLabel').textContent=`Раунд ${state.oddRound+1} из 4`;document.getElementById('oddHint').textContent='Найди того, кто относится к другому царству.';document.getElementById('oddNext').classList.add('hidden');shuffled(r.keys).forEach(k=>{const c=card(k,'odd-card');c.addEventListener('click',()=>chooseOdd(c,k));grid.append(c)})}
 function chooseOdd(c,k){const r=rounds[state.oddRound],hint=document.getElementById('oddHint');if(k===r.odd){c.classList.add('correct');hint.textContent=`Верно! ${ITEMS[k][0]} относится к другому царству.`;hint.className='game-hint good';document.getElementById('oddNext').classList.remove('hidden');document.querySelectorAll('.odd-card').forEach(x=>x.disabled=true)}else{c.classList.add('wrong');hint.textContent='Не совсем. Посмотри, какие трое относятся к одному царству.';setTimeout(()=>c.classList.remove('wrong'),500)}}
-document.getElementById('oddNext').addEventListener('click',()=>{if(state.oddRound<3){state.oddRound++;renderOdd()}else{earn('odd');goTo(8)}});
+document.getElementById('oddNext').addEventListener('click',()=>{if(state.oddRound<3){state.oddRound++;renderOdd()}else{earn('odd');goTo(9)}});
 document.getElementById('restart').addEventListener('click',()=>location.reload());
 goTo(0);
