@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#183c4d">
+  <title>Музей Жизни — интерактивный урок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="museum-shell">
+    <header class="topbar">
+      <button class="brand" type="button" data-go="0" aria-label="На главный экран">
+        <span class="brand-mark">✦</span><span>Музей Жизни</span>
+      </button>
+      <div class="progress-wrap" aria-label="Прогресс путешествия">
+        <div class="progress-track"><span id="progressFill"></span></div>
+        <span id="progressText">Зал 1 из 10</span>
+      </div>
+      <div class="stars" aria-live="polite"><span>★</span> <b id="starCount">0</b>/7</div>
+    </header>
+
+    <main id="app">
+      <section class="screen active hero-screen" data-screen="0" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">Срочное сообщение из музея</p>
+          <h1 id="heroTitle">Музей Жизни<br><em>в опасности!</em></h1>
+          <p class="lead">Сегодня ночью все экспонаты перепутались. Помоги вернуть живые существа в правильные залы.</p>
+          <button class="primary big" type="button" data-next>Начать квест <span>→</span></button>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="museum-building">
+            <div class="museum-sign">МУЗЕЙ</div><div class="columns">┃ ┃ ┃ ┃</div><div class="door">★</div>
+          </div>
+          <div class="floating-specimen specimen-a"><img src="assets/butterfly.svg" alt=""></div>
+          <div class="floating-specimen specimen-b"><img src="assets/mushroom.svg" alt=""></div>
+          <div class="floating-specimen specimen-c"><img src="assets/microbe.svg" alt=""></div>
+        </div>
+      </section>
+
+      <section class="screen intro-screen" data-screen="1" aria-labelledby="introTitle">
+        <div class="section-heading"><p class="eyebrow">Карта музея</p><h2 id="introTitle">Четыре удивительных царства</h2><p>Нажми на зал, чтобы узнать его главный секрет.</p></div>
+        <div class="kingdom-grid">
+          <button class="kingdom-tile animals" data-fact="Животные едят готовую пищу и обычно могут двигаться."><img src="assets/cat.svg" alt=""><b>Животные</b><span>Зоозал</span></button>
+          <button class="kingdom-tile plants" data-fact="Растения делают себе пищу с помощью света."><img src="assets/tree.svg" alt=""><b>Растения</b><span>Оранжерея</span></button>
+          <button class="kingdom-tile fungi" data-fact="Грибы — не растения и не животные. Они питаются готовыми веществами."><img src="assets/mushroom.svg" alt=""><b>Грибы</b><span>Пещера</span></button>
+          <button class="kingdom-tile bacteria" data-fact="Бактерии — очень маленькие живые организмы."><img src="assets/microbe.svg" alt=""><b>Бактерии</b><span>Лаборатория</span></button>
+        </div>
+        <div class="fact-bubble" id="kingdomFact">Царство — большая группа живых существ, похожих по важным признакам.</div>
+        <button class="primary" type="button" data-next>Перейти к сортировке →</button>
+      </section>
+
+      <section class="screen sort-screen" data-screen="2" aria-labelledby="sortTitle">
+        <div class="section-heading compact"><p class="eyebrow">Задание 1</p><h2 id="sortTitle">Разложи экспонаты</h2><p>Перетащи карточку в зал или сначала нажми на карточку, а затем на зал.</p></div>
+        <div class="drop-grid" data-sort-board="first"></div>
+        <div class="card-tray" data-card-tray="first"></div>
+        <p class="game-hint" data-hint="first">Начни с любого экспоната.</p>
+        <div class="success-panel" data-success="first"><b>Первый этаж музея спасён!</b><button class="primary" type="button" data-next>Идём дальше →</button></div>
+      </section>
+
+      <section class="screen themed animals-room" data-screen="3" aria-labelledby="animalsTitle">
+        <div class="lesson-card"><p class="eyebrow">Зал животных</p><h2 id="animalsTitle">Кто здесь животное?</h2><p>Животные едят готовую пищу. Они не делают её из солнечного света.</p></div>
+        <div class="choice-grid" data-choice-game="animals"></div>
+        <p class="game-hint" data-choice-hint="animals">Выбери всех животных и нажми «Проверить».</p>
+        <div class="actions"><button class="secondary" type="button" data-check-choice="animals">Проверить</button><button class="primary hidden" type="button" data-choice-next="animals" data-next>В оранжерею →</button></div>
+      </section>
+
+      <section class="screen themed plant-room" data-screen="4" aria-labelledby="plantTitle">
+        <div class="lesson-card"><p class="eyebrow">Оранжерея растений</p><h2 id="plantTitle">Накорми растение</h2><p>Растение приготовит пищу само. Выбери три вещи, которые ему нужны.</p></div>
+        <div class="plant-stage"><div class="sun-rays"></div><div class="plant-pot"><span class="sprout">🌱</span><span class="pot">▰</span></div><div class="plant-slots" data-plant-slots><span>?</span><span>?</span><span>?</span></div></div>
+        <div class="choice-grid small" data-choice-game="plant"></div>
+        <p class="game-hint" data-choice-hint="plant">Свет, вода и ещё кое-что из воздуха…</p>
+        <div class="actions"><button class="secondary" type="button" data-check-choice="plant">Проверить</button><button class="primary hidden" type="button" data-choice-next="plant" data-next>В пещеру грибов →</button></div>
+      </section>
+
+      <section class="screen themed fungi-room" data-screen="5" aria-labelledby="fungiTitle">
+        <div class="lesson-card"><p class="eyebrow">Пещера грибов</p><h2 id="fungiTitle">Кто испортил хлеб?</h2><p>Грибы не делают еду из света. Они питаются готовыми веществами.</p></div>
+        <div class="mold-scene"><div class="food-row"><img src="assets/bread.svg" alt="Хлеб"><img src="assets/apple.svg" alt="Яблоко"><img src="assets/cheese.svg" alt="Сыр"></div><div class="mold-cloud">ПЛЕСЕНЬ</div></div>
+        <div class="quiz-options" data-quiz="fungi">
+          <button data-answer="animals">Животные</button><button data-answer="plants">Растения</button><button data-answer="fungi">Грибы</button><button data-answer="bacteria">Бактерии</button>
+        </div>
+        <p class="game-hint" data-quiz-hint="fungi">Кто поселился на продуктах?</p>
+        <button class="primary hidden" type="button" data-quiz-next="fungi" data-next>В лабораторию →</button>
+      </section>
+
+      <section class="screen themed bacteria-room" data-screen="6" aria-labelledby="bacteriaTitle">
+        <div class="lesson-card"><p class="eyebrow">Лаборатория бактерий</p><h2 id="bacteriaTitle">Кого видно без микроскопа?</h2><p>Бактерии живые, но такие маленькие, что обычно их нельзя увидеть без микроскопа.</p></div>
+        <div class="choice-grid" data-choice-game="visible"></div>
+        <p class="game-hint" data-choice-hint="visible">Выбери тех, кого можно увидеть глазами.</p>
+        <div class="actions"><button class="secondary" type="button" data-check-choice="visible">Проверить</button><button class="primary hidden" type="button" data-choice-next="visible" data-next>Быстрый турнир →</button></div>
+      </section>
+
+      <section class="screen odd-screen" data-screen="7" aria-labelledby="oddTitle">
+        <div class="section-heading compact"><p class="eyebrow">Быстрый турнир</p><h2 id="oddTitle">Кто лишний?</h2><p id="roundLabel">Раунд 1 из 4</p></div>
+        <div class="odd-grid" id="oddGrid"></div>
+        <p class="game-hint" id="oddHint">Найди того, кто относится к другому царству.</p>
+        <button class="primary hidden" type="button" id="oddNext">Следующий раунд →</button>
+      </section>
+
+      <section class="screen final-sort" data-screen="8" aria-labelledby="finalSortTitle">
+        <div class="section-heading compact"><p class="eyebrow">Финальный квест</p><h2 id="finalSortTitle">Спаси весь музей</h2><p>Последние экспонаты ждут своих залов!</p></div>
+        <div class="drop-grid" data-sort-board="final"></div>
+        <div class="card-tray compact-tray" data-card-tray="final"></div>
+        <p class="game-hint" data-hint="final">Можно перетаскивать или раскладывать нажатием.</p>
+        <div class="success-panel" data-success="final"><b>Все залы снова сияют!</b><button class="primary" type="button" data-next>Получить награду →</button></div>
+      </section>
+
+      <section class="screen award-screen" data-screen="9" aria-labelledby="awardTitle">
+        <div class="confetti" aria-hidden="true"></div>
+        <div class="medal"><span>★</span></div>
+        <p class="eyebrow">Музей Жизни спасён</p><h2 id="awardTitle">Ты — Хранитель<br>Музея Жизни!</h2>
+        <p class="lead">Теперь ты знаешь секреты четырёх царств живой природы.</p>
+        <div class="summary-grid"><span class="animals"><b>Животные</b>едят готовую пищу</span><span class="plants"><b>Растения</b>готовят пищу на свету</span><span class="fungi"><b>Грибы</b>питаются готовыми веществами</span><span class="bacteria"><b>Бактерии</b>очень маленькие и живые</span></div>
+        <button class="primary big" type="button" id="restart">Пройти ещё раз ↻</button>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
